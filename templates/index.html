@@ -4,7 +4,7 @@
 <head>
     {% block head %}
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Magaz</title>
         <link rel="stylesheet" href={% static 'css/catalog.css'  %}>
         <link rel="stylesheet" href={% static 'css/menu.css'  %}>
     {% endblock %}
@@ -41,10 +41,12 @@
         
         {% for one in items %}
             <div class="card">
-                <img src="{% static one.image %}" alt="">
+                <img src="{% static one.image %}" alt="" height="200px" width="200">
                 <h3>{{ one.name }}</h3>
                 <p>{{ one.price }}</p>
-            <button>В корзину</button>
+                <a href="{% url 'buy' one.category.name one.id %}">
+                    <button>В корзину</button>
+                </a>    
             </div>
         {% endfor %}
         </div>

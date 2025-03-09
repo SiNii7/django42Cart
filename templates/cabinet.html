@@ -16,9 +16,11 @@
         <th>Телефон</th>
         <th>Итог</th>
         <th>Статус</th>
+        <th></th>
     </tr>
     {% for one in orders %}
-        <td>{{ one.data }}</td>
+        <tr>
+        <td>{{ one.date }}</td>
         <td>{{ one.adres }}</td>
         <td>{{ one.tel }}</td>
         <td>{{ one.total }}</td>
@@ -26,6 +28,7 @@
         <td>
         <button>Подробнее</button>
         </td>
+        </tr>
     {% endfor %}
     </table>
 {% endblock %}
