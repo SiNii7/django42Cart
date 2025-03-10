@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
 import datetime
+import telebot
 
 # Create your views here.
 
@@ -30,11 +31,11 @@ def cart(request):
             k2 = form.cleaned_data['telephone']
             zakaz = ''
             for one in items:
-                zakaz+=one.tovar.name + ' '+ str(one.count)+' '+str(one.summa)
-            zakaz+="Всего "+str(total)+'\n'
-            zakaz += "Адрес " + k1 + '\n'
-            zakaz += "Телефон " + k2 + '\n'
-            zakaz += "Пользователь " + request.user.username + '\n'
+                zakaz+=one.tovar.name + ' '+ str(one.count)+'шт '+str(one.summa)+'руб<br>'
+            zakaz+="Всего "+str(total)+'руб<br>'
+            zakaz += "Адрес " + k1 + '<br>'
+            zakaz += "Телефон " + k2 + '<br>'
+            zakaz += "Пользователь " + request.user.username + '<br>'
             status = Status.objects.get(id=1)
             Order.objects.create(adress=k1,tel=k2, user_id=request.user.id,
                                  total=total, status=status,
@@ -44,6 +45,9 @@ def cart(request):
             items.delete()
             total = 0
             sps = 'Спасибо за заказ'
+            telegram('Привет')
+            zakaznew = zakaz.replace('<br>','\n')
+            telegram(zakaznew)
 
     data={'items':items, 'total':total, 'form':form, 'sps':sps}
     return render(request,'cart.html', data)
@@ -82,3 +86,10 @@ def edit(request, itemid,num):
         return redirect('cart')
     else:
         return redirect('delete', itemid)
+
+def telegram(message):
+    adres = 't.me/Boriscatalog2_bot'
+    token = '8042919855:AAHt80S0GU-0U4pdAv9y3TdcBtr8LxxUgUk'
+    chat = '279315648'
+    bot = telebot.TeleBot(token)
+    bot.send_message(chat, message)
